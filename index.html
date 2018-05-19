@@ -2,18 +2,47 @@
 <html lang="en">
 
 <head>
-    <title>GifTastic Plus</title>
+    <title>Rock Paper Scissor Online!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
         crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="assets/css/style.css">
-    <!-- <link href="https://fonts.googleapis.com/css?family=Roboto+Mono|Press+Start+2P|Fjalla+One" rel="stylesheet"> -->
+    <link href="https://fonts.googleapis.com/css?family=Anton|Libre+Baskerville|Shadows+Into+Light" rel="stylesheet">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js" defer></script>
     <script src="assets/javascript/app.js" defer></script>
 </head>  
 <body>
-
+    <header class="shadow p-3 mb-5 bg-white rounded">
+        <h3>Rock Paper Scissors</h3>
+    </header>
+    <div class="container-fluid">
+        <div class="row shadow p-3 mb-5 bg-white rounded" id="playerinput">
+            <input class="form-control" id="playername" type="text" placeholder="Enter your name">
+            <button id="playernamebutton" class="btn btn-primary">Start Game</button>
+            <h6>Choose an avatar</h6>
+            <img class="avatar" src="assets/images/a-drmanhattan.png" height="50" width="50">
+            <img class="avatar" src="assets/images/a-wolverine.png" height="50" width="50">
+            <img class="avatar" src="assets/images/a-cyclops.png" height="50" width="50">
+            <img class="avatar" src="assets/images/a-batman.png" height="50" width="50">
+            <img class="avatar" src="assets/images/a-superman.png" height="50" width="50">
+            <img class="avatar" src="assets/images/a-ironman.png" height="50" width="50">
+        </div>
+        <div class="row justify-content-around" id="gamearea">
+            
+            <div class="col-md-3 shadow p-3 mb-5 bg-white rounded" id="player1">
+                    Waiting for player one
+            </div>
+            <!-- <div class="col-md-1"></div> -->
+            <div class="col-md-4 shadow p-3 mb-5 bg-white rounded" id="battlearea"></div>
+            <!-- <div class="col-md-1"></div> -->
+            <div class='col-md-3 shadow p-3 mb-5 bg-white rounded' id='player2'>
+                    Waiting for player two
+            </div>
+        </div>
+        <div class="row" id="chatarea">
+        </div>
+    </div>
 
 
 

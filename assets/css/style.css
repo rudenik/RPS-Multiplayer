@@ -1,0 +1,48 @@
+.container-fluid {
+  width: 95%;
+}
+header {
+    text-align: left;
+    /* color: #4593e6; */
+    /* -webkit-text-stroke: 1px black; */
+    /* text-shad */
+  font-family: "Anton", sans-serif;
+}
+#playername {
+  display: inline;
+  width: 20%;
+}
+h6{
+    margin: 3px;
+}
+.avatar{
+    margin: 3px;
+}
+.avatar:hover{
+    border:solid;
+    border-width: 2px;
+}
+.avatar:active{
+    border:solid;
+    border-width: 2px;
+}
+.btn-primary {
+  margin: 5px 0px 5px 5px;
+}
+#playerinput {
+  font-family: "Shadows Into Light", cursive;
+}
+#gamearea {
+  font-family: "Libre Baskerville", serif;
+}
+#player1,
+#player2,
+#battlearea {
+  border: solid;
+  border-width: 5px;
+  border-color: #2e87e6;
+  /* margin: 1px; */
+}
+body{
+    background-color: #629bd9;
+}
