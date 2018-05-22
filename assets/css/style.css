@@ -8,7 +8,7 @@ header {
     /* text-shad */
   font-family: "Anton", sans-serif;
 }
-#playername {
+#playername-input {
   display: inline;
   width: 20%;
 }
@@ -22,7 +22,7 @@ h6{
     border:solid;
     border-width: 2px;
 }
-.avatar:active{
+.active{
     border:solid;
     border-width: 2px;
 }
