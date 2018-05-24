@@ -447,7 +447,7 @@ function drawOtherThrow(oThrowToDraw, whereToDraw) {
 	otherThrowDiv.append(theThrow);
 	$("#throwareaplayer" + whereToDraw).append(otherThrowDiv);
 	setTimeout(function() {
-		$("#throwareaplayer" + whereToDraw).remove();
+		$("#throwareaplayer" + whereToDraw).empty();
 	}, 5000);
 }
 function player2Win() {
