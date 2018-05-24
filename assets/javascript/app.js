@@ -166,7 +166,7 @@ function drawPlayer(playerInfo, placeToBeDrawn) {
     .text("Wins: ")
     .addClass("justify-content-center");
   var winsCount = $("<div>");
-  winsCount.text(playerInfo.wins);
+  winsCount.text(playerInfo.wins).addClass("wins");
   winsLabel.append(winsCount);
   var losesLabel = $("<div>");
   losesLabel
@@ -174,7 +174,7 @@ function drawPlayer(playerInfo, placeToBeDrawn) {
     .addClass("justify-content-center")
     .text("Loses: ");
   var losesCount = $("<div>");
-  losesCount.text(playerInfo.loses);
+  losesCount.text(playerInfo.loses).addClass("loses");
   losesLabel.append(losesCount);
   placeToBeDrawn.append(player1Image);
   placeToBeDrawn.append(playerNameDiv);
@@ -183,6 +183,7 @@ function drawPlayer(playerInfo, placeToBeDrawn) {
 }
 
 function drawControls(where) {
+  console.log("DrawControls Fired");
   $("#throws").remove();
   var controlDiv = $("<div>");
   controlDiv.addClass("row").attr("id", "throws");
@@ -222,7 +223,7 @@ $("#gamearea").on("click", ".throw", function() {
     .child(playerNumber)
     .onDisconnect()
     .remove();
-  controlsOn = false;
+  // controlsOn = false;
 });
 
 ref.child("/Players").on("value", function(snap) {
@@ -259,32 +260,25 @@ ref.child("/Throws").on("value", function(snap) {
     console.log("we have a game here");
     if (snap.child(1).val() == "paper" && snap.child(2).val() == "rock") {
       console.log("Player1 wins");
-      player1Win();
-    //   var otherThrowDiv = $("<div>"); This doesn't work trying to show the other players throw.
-    //   otherThrowDiv
-    // .addClass("col")
-    // .text("ROCK")
-    // .attr("id", "rock")
-    // .addClass("throw");
-    // $("#player2#throws").append(otherThrowDiv);
+      player1Win(snap.child(2).val().toUpperCase());
     } else if (
       snap.child(1).val() == "rock" &&
       snap.child(2).val() == "scissor"
     ) {
       console.log("Player1 wins");
-      player1Win();
+      player1Win(snap.child(2).val().toUpperCase());
     } else if (
       snap.child(1).val() == "scissor" &&
       snap.child(2).val() == "paper"
     ) {
       console.log("Player1 wins");
-      player1Win();
+      player1Win(snap.child(2).val().toUpperCase());
     } else if (snap.child(1).val() == snap.child(2).val()) {
       console.log("Tie Game");
       $("#battlearea")
         .html("<h2>DRAW!!!</h2>")
         .css("text-align", "center");
-        ref.child("/Throws").remove();
+      ref.child("/Throws").remove();
       setTimeout(function() {
         drawControls($("#player" + playerNumber));
         $("#battlearea").empty();
@@ -294,24 +288,24 @@ ref.child("/Throws").on("value", function(snap) {
       snap.child(1).val() == "rock"
     ) {
       console.log("Player2 wins");
-      player2Win();
+      player2Win(snap.child(1).val().toUpperCase());
     } else if (
       snap.child(2).val() == "rock" &&
       snap.child(1).val() == "scissor"
     ) {
       console.log("Player2 wins");
-      player2Win();
+      player2Win(snap.child(1).val().toUpperCase());
     } else if (
       snap.child(2).val() == "scissor" &&
       snap.child(1).val() == "paper"
     ) {
       console.log("Player2 wins");
-      player2Win();
+      player2Win(snap.child(1).val().toUpperCase());
     }
   }
 });
 
-function drawWinner(winner){
+function drawWinner(winner) {
   $("#battlearea").empty();
   var playerNameDiv = $("<div>");
   playerNameDiv.addClass("row");
@@ -322,47 +316,61 @@ function drawWinner(winner){
   playerNameDiv.html("<b>The Winner is <br>" + winner.name + "</b>");
   $("#battlearea").append(player1Image);
   $("#battlearea").append(playerNameDiv);
-  
 }
-function player2Win() {
+function player2Win(oThrow) {
   console.log("Player2 wins");
-  localPlayer1.loses++;
-  playerRef
-    .child("1")
-    .child("loses")
-    .set(localPlayer1.loses);
-  localPlayer2.wins++;
-  playerRef
-    .child("2")
-    .child("wins")
-    .set(localPlayer2.wins);
-  drawPlayer(localPlayer2, $("#player2"));
-  drawPlayer(localPlayer1, $("#player1"));
-  drawWinner(localPlayer2);
   ref.child("/Throws").remove();
+  localPlayer1.loses++;
+  localPlayer2.wins++;
+  $("#player1 .loses").text(localPlayer1.loses);
+  $("#player2 .wins").text(localPlayer2.wins);
+  var otherThrowDiv = $("<div>"); //you need an if statement in one of these incase you are player2 or if you are player1
+  otherThrowDiv.addClass("row").attr("id", "othrow");
+  var theThrow = $("<div>");
+  theThrow.text(oThrow).addClass("col");
+  otherThrowDiv.append(theThrow);
+  $("#player1").append(otherThrowDiv);
+  drawWinner(localPlayer2);
   setTimeout(function() {
+    playerRef
+      .child("1")
+      .child("loses")
+      .set(localPlayer1.loses);
+    playerRef
+      .child("2")
+      .child("wins")
+      .set(localPlayer2.wins);
     drawControls($("#player" + playerNumber));
     $("#battlearea").empty();
+    $("#othrow").remove();
   }, 5000);
 }
-function player1Win(){
+function player1Win(oThrow) {
   console.log("Player1 wins");
-      localPlayer1.wins++;
-      playerRef
-        .child("1")
-        .child("wins")
-        .set(localPlayer1.wins);
-      localPlayer2.loses++;
-      playerRef
-        .child("2")
-        .child("loses")
-        .set(localPlayer2.loses);
-      drawPlayer(localPlayer2, $("#player2"));
-      drawPlayer(localPlayer1, $("#player1"));
-      drawWinner(localPlayer1);
-      ref.child("/Throws").remove();
-      setTimeout(function() {
-        drawControls($("#player" + playerNumber));
-        $("#battlearea").empty();
-      }, 5000);
+  ref.child("/Throws").remove();
+  localPlayer1.wins++;
+  localPlayer2.loses++;
+  $("#player1 .wins").text(localPlayer1.wins);
+  $("#player2 .loses").text(localPlayer2.loses);
+  var otherThrowDiv = $("<div>"); //you need an if statement in one of these incase you are player2 or if you are player1
+  otherThrowDiv.addClass("row").attr("id", "othrow");//further more if you are p2 your counts are now not going up. 
+  var theThrow = $("<div>");// because the update is happening one after the other, you are losing the second increment. 
+  theThrow.text(oThrow).addClass("col");
+  otherThrowDiv.append(theThrow);
+  $("#player2").append(otherThrowDiv);
+  drawWinner(localPlayer1);
+  ref.child("/Throws").remove();
+  setTimeout(function() {
+    playerRef
+      .child("1")
+      .child("wins")
+      .set(localPlayer1.wins);
+    playerRef
+      .child("2")
+      .child("loses")
+      .set(localPlayer2.loses);
+    drawControls($("#player" + playerNumber));
+    $("#battlearea").empty();
+    $("#othrow").remove();
+  }, 5000);
 }
