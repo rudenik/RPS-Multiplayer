@@ -16,9 +16,6 @@ var playerThrow;
 var localPlayer1;
 var localPlayer2;
 
-
-
-
 $("#playerinput").on("click", ".avatar", function() {
 	$(this).addClass("active");
 	$(this)
@@ -31,19 +28,18 @@ $("#playerstartbutton").on("click", function(event) {
 	name = $("#playername-input")
 		.val()
 		.trim();
-	
+
 	if ($(".active").length < 1) {
 		alert("pick an avatar");
 	} else {
 		avatar = $(".active").attr("src");
-		
+
 		var player = {
 			name: name,
 			avatar: avatar,
 			wins: 0,
 			loses: 0,
 			dateAdded: firebase.database.ServerValue.TIMESTAMP //,
-			
 		};
 
 		FBDB.ref()
@@ -93,7 +89,7 @@ FBDB.ref()
 	.child("/Players")
 	.once("value")
 	.then(function(onceShot) {
-		if (onceShot.numChildren() == 0) {			
+		if (onceShot.numChildren() == 0) {
 		} else if (onceShot.numChildren() == 1) {
 			playerNumber = 2;
 			drawPlayer(onceShot.child("1").val(), $("#player1"));
@@ -182,7 +178,6 @@ $("#gamearea").on("click", ".throw", function() {
 		.child(playerNumber)
 		.onDisconnect()
 		.remove();
-	
 });
 
 ref.child("/Players").on("value", function(snap) {
@@ -197,7 +192,7 @@ ref.child("/Players").on("value", function(snap) {
 	if (snap.numChildren() === 2) {
 		if (playerNumber == 1) {
 			drawControls($("#throwareaplayer1"));
-			drawPlayer(snap.child("2").val(), $("#player2"));	
+			drawPlayer(snap.child("2").val(), $("#player2"));
 		}
 		if (playerNumber == 2) {
 			drawControls($("#throwareaplayer2"));
@@ -382,7 +377,7 @@ function drawWinner(winner) {
 	$("#battlearea").append(playerNameDiv);
 }
 function drawOtherThrow(oThrowToDraw, whereToDraw) {
-	var otherThrowDiv = $("<div>"); 
+	var otherThrowDiv = $("<div>");
 	otherThrowDiv.addClass("row").attr("id", "othrow");
 	var theThrow = $("<div>");
 	theThrow.text(oThrowToDraw).addClass("col");
@@ -437,37 +432,44 @@ function player1Win() {
 }
 
 $("#sendchat").on("click", function(event) {
-  event.preventDefault();
-  if(!playerNumber){
-    alert("Select a user name and avatar, then hit start game to use chat functionality");
-   } else{
-  var chatText = $("#chat-input").val();
-  if(playerNumber==1){
-    var whoSent = localPlayer1.name;
-  }else{
-    var whoSent = localPlayer2.name;
-  }
-  var chat = {
-    sender: whoSent,
-    text: chatText,
-    dateAdded: firebase.database.ServerValue.TIMESTAMP 
-  };
-  ref.child("/Message").push(chat);
-  ref.child("/Message").onDisconnect().remove();
-  $("#chat-input").val("");
-}
+	event.preventDefault();
+	if (!playerNumber) {
+		alert(
+			"Select a user name and avatar, then hit start game to use chat functionality"
+		);
+	} else {
+		var chatText = $("#chat-input").val();
+		if (playerNumber == 1) {
+			var whoSent = localPlayer1.name;
+		} else {
+			var whoSent = localPlayer2.name;
+		}
+		var chat = {
+			sender: whoSent,
+			text: chatText,
+			dateAdded: firebase.database.ServerValue.TIMESTAMP
+		};
+		ref.child("/Message").push(chat);
+		ref
+			.child("/Message")
+			.onDisconnect()
+			.remove();
+		$("#chat-input").val("");
+	}
 });
 
-ref.child("/Message").orderByChild("dateAdded").limitToLast(5).on("child_added", function (message) {
-
-  var tBody = $("tbody");
-  var tRow = $("<tr>");
-  // var playerString = localPlayer+sender
-  var whoSentTD = $("<td>").html("<b>" + message.val().sender + "</b>");
-  var textTD = $("<td>").text(message.val().text);
-  var dateATD = $("<td>").text(moment(message.val().dateAdded).format("hh:mm:ss"));
-  tRow.append(whoSentTD, textTD, dateATD);
-  tBody.prepend(tRow);
-  
-
-})
+ref
+	.child("/Message")
+	.orderByChild("dateAdded")
+	.limitToLast(5)
+	.on("child_added", function(message) {
+		var tBody = $("tbody");
+		var tRow = $("<tr>");
+		var whoSentTD = $("<td>").html("<b>" + message.val().sender + "</b>");
+		var textTD = $("<td>").text(message.val().text);
+		var dateATD = $("<td>").text(
+			moment(message.val().dateAdded).format("hh:mm:ss")
+		);
+		tRow.append(whoSentTD, textTD, dateATD);
+		tBody.prepend(tRow);
+	});
