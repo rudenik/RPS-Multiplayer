@@ -11,7 +11,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js" defer></script>
     <script src="assets/javascript/app.js" defer></script>
-</head>  
+</head>
+
 <body>
     <header class="shadow p-3 mb-5 bg-white rounded">
         <h3>Rock Paper Scissors</h3>
@@ -29,15 +30,20 @@
             <img class="avatar" src="assets/images/a-ironman.png" height="50" width="50">
         </div>
         <div class="row justify-content-around" id="gamearea">
-            
-            <div class="col-md-3 shadow p-3 mb-5 bg-white rounded" id="player1">
+
+            <div class="col-md-4 shadow p-3 mb-5 bg-white rounded" id="player1whole">
+                <div class="row" id="player1">
                     Waiting for player one
+                </div>
+                <div class="row justify-content-center" id="throwareaplayer1">
+                </div>
             </div>
-            <!-- <div class="col-md-1"></div> -->
-            <div class="col-md-4 shadow p-3 mb-5 bg-white rounded" id="battlearea"></div>
-            <!-- <div class="col-md-1"></div> -->
-            <div class='col-md-3 shadow p-3 mb-5 bg-white rounded' id='player2'>
+            <div class="col-md-3 shadow p-3 mb-5 bg-white rounded" id="battlearea"></div>
+            <div class='col-md-4 shadow p-3 mb-5 bg-white rounded' id="player2whole">
+                <div class="row" id='player2'>
                     Waiting for player two
+                </div>
+                <div class="row justify-content-center" id="throwareaplayer2"></div>
             </div>
         </div>
         <div class="row" id="chatarea">

@@ -35,17 +35,22 @@ h6{
 #gamearea {
   font-family: "Libre Baskerville", serif;
 }
-#player1,
-#player2,
+#player1whole,
+#player2whole,
 #battlearea {
   border: solid;
   border-width: 5px;
   border-color: #2e87e6;
+  height: 345px;
   /* margin: 1px; */
 }
+
 body{
     background-color: #629bd9;
 }
-#battlearea{
+#battlearea, #throwareaplayer1, #throwareaplayer2{
   text-align: center;
+}
+#throwareaplayer1, #throwareaplayer2{
+  margin-top: 5px;
 }
