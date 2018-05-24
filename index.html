@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Anton|Libre+Baskerville|Shadows+Into+Light" rel="stylesheet">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" defer></script>
     <script src="https://www.gstatic.com/firebasejs/5.0.3/firebase.js" defer></script>
+    <script src="assets/javascript/moment.js" defer></script>
     <script src="assets/javascript/app.js" defer></script>
 </head>
 
@@ -46,10 +47,26 @@
                 <div class="row justify-content-center" id="throwareaplayer2"></div>
             </div>
         </div>
-        <div class="row" id="chatarea">
+    </div>
+        <div class="container-fluid" id="chatarea">
+            <div class="row rounded" id="chats">
+                <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th style="width: 10%"></th>
+                                <th style="width: 80%"></th>
+                                <th style="width: 10%"></th>
+                            </tr>
+                            <tbody>
+
+                            </tbody>
+                        </thead>
+                </table>
+            </div>
+            <div class="row shadow p-3 mb-5 bg-white rounded" id="chatinputrow">
+                <input class="form-control" id="chat-input" type="text" placeholder="Got something to say...">
+                <button id="sendchat" class="btn btn-primary" type="submit">Send</button>
+            </div>
         </div>
     </div>
-
-
-
 </body>

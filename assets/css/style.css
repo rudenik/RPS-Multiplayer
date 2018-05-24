@@ -54,3 +54,21 @@ body{
 #throwareaplayer1, #throwareaplayer2{
   margin-top: 5px;
 }
+#chats{
+  height: 200px;
+  background-color: white;
+  margin: 5px;
+}
+#chatinputrow{
+  background-color: white;
+  margin: 5px;
+}
+
+#chat-input{
+  display: inline;
+  width: 90%;
+}
+
+.borderless td, .borderless th {
+  border: none;
+}

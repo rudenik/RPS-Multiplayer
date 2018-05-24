@@ -10,38 +10,14 @@ firebase.initializeApp(config);
 
 var FBDB = firebase.database();
 var ref = FBDB.ref();
-var connections = FBDB.ref("/connections");
-var connectedRef = FBDB.ref(".info/connected");
 var playerRef = FBDB.ref("/Players");
-var throwRef = FBDB.ref("/Throws");
-// var numberOfConnected;
 var playerNumber;
-// var connectionID;
 var playerThrow;
-var controlsOn = false;
 var localPlayer1;
 var localPlayer2;
-var gameWon = false; //in the drawPlayer function add an if statement for a title in the area "Winner!"
 
-// var amOnline = connectedRef;
-// var userRef = FBDB.ref("/presence/"+userid);
 
-// amOnline.on('value', function(snap){
-//   if(snap.val()){
-//     userRef.onDisconnect.remove();
-//     userRef.set(true);
-//   }
-// });
 
-// connectedRef.on("value", function(snap) {
-//   if (snap.val()) {
-
-//     // connectionID = snap.val();
-//     // console.log(connectionID);
-//     var con = connections.push(true);
-//     con.onDisconnect().remove()
-//   }
-// });
 
 $("#playerinput").on("click", ".avatar", function() {
 	$(this).addClass("active");
@@ -55,30 +31,27 @@ $("#playerstartbutton").on("click", function(event) {
 	name = $("#playername-input")
 		.val()
 		.trim();
-	// console.log($(".active"));
+	
 	if ($(".active").length < 1) {
 		alert("pick an avatar");
 	} else {
 		avatar = $(".active").attr("src");
-		// console.log(name);
-		// console.log(avatar);
+		
 		var player = {
 			name: name,
 			avatar: avatar,
 			wins: 0,
 			loses: 0,
 			dateAdded: firebase.database.ServerValue.TIMESTAMP //,
-			//conID : connectionID
+			
 		};
 
 		FBDB.ref()
 			.child("/Players")
 			.once("value")
 			.then(function(onceShot) {
-				// console.log(onceShot.val());
 				if (onceShot.numChildren() == 0) {
 					playerNumber = 1;
-					console.log("There are no Players");
 					ref
 						.child("Players")
 						.child(1)
@@ -87,7 +60,6 @@ $("#playerstartbutton").on("click", function(event) {
 						.empty()
 						.css("height", "88px");
 					drawPlayer(player, $("#player1"));
-					// drawControls($("#player1"));
 					ref
 						.child("Players")
 						.child(1)
@@ -95,7 +67,6 @@ $("#playerstartbutton").on("click", function(event) {
 						.remove();
 				} else if (onceShot.numChildren() == 1) {
 					playerNumber = 2;
-					console.log("There is one Player");
 					ref
 						.child("Players")
 						.child(2)
@@ -110,7 +81,6 @@ $("#playerstartbutton").on("click", function(event) {
 						.onDisconnect()
 						.remove();
 				} else if (onceShot.numChildren() == 2) {
-					console.log("There are 2 players");
 					alert("Too many Players, sorry");
 				} else {
 					console.log("lots of players");
@@ -118,27 +88,16 @@ $("#playerstartbutton").on("click", function(event) {
 			});
 	}
 });
-// connections.on("value", function(snap) {
-//   console.log(snap.numChildren());
-//   numberOfConnected = snap.numChildren();
 
-// });
 FBDB.ref()
 	.child("/Players")
 	.once("value")
 	.then(function(onceShot) {
-		console.log(onceShot.val());
-		if (onceShot.numChildren() == 0) {
-			console.log("There are no Players");
-			// playerNumber=1;
+		if (onceShot.numChildren() == 0) {			
 		} else if (onceShot.numChildren() == 1) {
-			console.log("you are player 2");
 			playerNumber = 2;
 			drawPlayer(onceShot.child("1").val(), $("#player1"));
 		} else if (onceShot.numChildren() == 2) {
-			console.log("There are 2 players");
-			//   console.log(onceShot.child("1").val().name);
-			//   console.log(onceShot.child("2").val().name);
 			drawPlayer(onceShot.child("1").val(), $("#player1"));
 			drawPlayer(onceShot.child("2").val(), $("#player2"));
 			$("#playerinput")
@@ -151,7 +110,6 @@ FBDB.ref()
 	});
 
 function drawPlayer(playerInfo, placeToBeDrawn) {
-	console.log(playerInfo.name);
 	placeToBeDrawn.empty();
 	var playerCol = $("<div>");
 	playerCol.addClass("col");
@@ -186,7 +144,6 @@ function drawPlayer(playerInfo, placeToBeDrawn) {
 }
 
 function drawControls(where) {
-	console.log("DrawControls Fired");
 	$("#throws").remove();
 	var controlDiv = $("<div>");
 	controlDiv.addClass("row").attr("id", "throws");
@@ -214,7 +171,6 @@ function drawControls(where) {
 	where.append(controlDiv);
 }
 $("#gamearea").on("click", ".throw", function() {
-	console.log($(this).attr("id"));
 	$(this)
 		.siblings()
 		.css("display", "none");
@@ -226,7 +182,7 @@ $("#gamearea").on("click", ".throw", function() {
 		.child(playerNumber)
 		.onDisconnect()
 		.remove();
-	// controlsOn = false;
+	
 });
 
 ref.child("/Players").on("value", function(snap) {
@@ -237,32 +193,23 @@ ref.child("/Players").on("value", function(snap) {
 	if (snap.child("2").val()) {
 		localPlayer2 = snap.child("2").val();
 		console.log("player 2 present");
-		console.log(localPlayer2.name);
-		console.log(localPlayer2.wins);
 	}
-	console.log("There are " + snap.numChildren() + " players");
 	if (snap.numChildren() === 2) {
-		console.log(controlsOn);
-		console.log("I am Player: " + playerNumber);
 		if (playerNumber == 1) {
 			drawControls($("#throwareaplayer1"));
-			drawPlayer(snap.child("2").val(), $("#player2"));
-			controlsOn = true;
+			drawPlayer(snap.child("2").val(), $("#player2"));	
 		}
 		if (playerNumber == 2) {
 			drawControls($("#throwareaplayer2"));
 			drawPlayer(snap.child("1").val(), $("#player1"));
-			controlsOn = true;
 		}
 	}
 });
 
 ref.child("/Throws").on("value", function(snap) {
-	console.log("There are " + snap.numChildren() + " throws");
 	if (snap.numChildren() === 2) {
 		console.log("we have a game here");
 		if (snap.child(1).val() == "paper" && snap.child(2).val() == "rock") {
-			console.log("Player1 wins");
 			player1Win();
 			if (playerNumber == 1) {
 				drawOtherThrow(
@@ -285,7 +232,6 @@ ref.child("/Throws").on("value", function(snap) {
 			snap.child(1).val() == "rock" &&
 			snap.child(2).val() == "scissors"
 		) {
-			console.log("Player1 wins");
 			player1Win();
 			if (playerNumber == 1) {
 				drawOtherThrow(
@@ -308,7 +254,6 @@ ref.child("/Throws").on("value", function(snap) {
 			snap.child(1).val() == "scissors" &&
 			snap.child(2).val() == "paper"
 		) {
-			console.log("Player1 wins");
 			player1Win();
 			if (playerNumber == 1) {
 				drawOtherThrow(
@@ -358,7 +303,6 @@ ref.child("/Throws").on("value", function(snap) {
 			snap.child(2).val() == "paper" &&
 			snap.child(1).val() == "rock"
 		) {
-			console.log("Player2 wins");
 			player2Win();
 			if (playerNumber == 1) {
 				drawOtherThrow(
@@ -381,7 +325,6 @@ ref.child("/Throws").on("value", function(snap) {
 			snap.child(2).val() == "rock" &&
 			snap.child(1).val() == "scissors"
 		) {
-			console.log("Player2 wins");
 			player2Win();
 			if (playerNumber == 1) {
 				drawOtherThrow(
@@ -404,7 +347,6 @@ ref.child("/Throws").on("value", function(snap) {
 			snap.child(2).val() == "scissors" &&
 			snap.child(1).val() == "paper"
 		) {
-			console.log("Player2 wins");
 			player2Win();
 			if (playerNumber == 1) {
 				drawOtherThrow(
@@ -440,7 +382,7 @@ function drawWinner(winner) {
 	$("#battlearea").append(playerNameDiv);
 }
 function drawOtherThrow(oThrowToDraw, whereToDraw) {
-	var otherThrowDiv = $("<div>"); //you need an if statement in one of these incase you are player2 or if you are player1
+	var otherThrowDiv = $("<div>"); 
 	otherThrowDiv.addClass("row").attr("id", "othrow");
 	var theThrow = $("<div>");
 	theThrow.text(oThrowToDraw).addClass("col");
@@ -451,7 +393,6 @@ function drawOtherThrow(oThrowToDraw, whereToDraw) {
 	}, 5000);
 }
 function player2Win() {
-	console.log("Player2 wins");
 	ref.child("/Throws").remove();
 	localPlayer1.loses++;
 	localPlayer2.wins++;
@@ -473,7 +414,6 @@ function player2Win() {
 	}, 5000);
 }
 function player1Win() {
-	console.log("Player1 wins");
 	ref.child("/Throws").remove();
 	localPlayer1.wins++;
 	localPlayer2.loses++;
@@ -495,3 +435,35 @@ function player1Win() {
 		$("#battlearea").empty();
 	}, 5000);
 }
+
+$("#sendchat").on("click", function(event) {
+	event.preventDefault();
+  var chatText = $("#chat-input").val();
+  if(playerNumber==1){
+    var whoSent = localPlayer1.name;
+  }else{
+    var whoSent = localPlayer2.name;
+  }
+  var chat = {
+    sender: whoSent,
+    text: chatText,
+    dateAdded: firebase.database.ServerValue.TIMESTAMP 
+  };
+  ref.child("/Message").push(chat);
+  ref.child("/Message").onDisconnect().remove();
+});
+
+ref.child("/Message").orderByChild("dateAdded").limitToLast(5).on("child_added", function (message) {
+  
+  var tBody = $("tbody");
+  var tRow = $("<tr>");
+  // var playerString = localPlayer+sender
+  var whoSentTD = $("<td>").html("<b>" + message.val().sender + "</b>");
+  var textTD = $("<td>").text(message.val().text);
+  var dateATD = $("<td>").text(moment(message.val().dateAdded).format("hh:mm:ss"));
+  tRow.append(whoSentTD, textTD, dateATD);
+  tBody.append(tRow);
+  
+
+
+})
