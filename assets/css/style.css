@@ -58,6 +58,7 @@ body{
   height: 200px;
   background-color: white;
   margin: 5px;
+  overflow-y: scroll;
 }
 #chatinputrow{
   background-color: white;
@@ -69,6 +70,11 @@ body{
   width: 90%;
 }
 
-.borderless td, .borderless th {
-  border: none;
+.table .table-borderless{
+  table-layout: fixed;
 }
+.table-condensed>thead>tr>th, .table-condensed>tbody>tr>th, .table-condensed>tfoot>tr>th, .table-condensed>thead>tr>td, .table-condensed>tbody>tr>td, .table-condensed>tfoot>tr>td{
+  padding: 3px;
+}
+
+

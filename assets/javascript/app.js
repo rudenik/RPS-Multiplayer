@@ -437,7 +437,10 @@ function player1Win() {
 }
 
 $("#sendchat").on("click", function(event) {
-	event.preventDefault();
+  event.preventDefault();
+  if(!playerNumber){
+    alert("Select a user name and avatar, then hit start game to use chat functionality");
+   } else{
   var chatText = $("#chat-input").val();
   if(playerNumber==1){
     var whoSent = localPlayer1.name;
@@ -451,10 +454,12 @@ $("#sendchat").on("click", function(event) {
   };
   ref.child("/Message").push(chat);
   ref.child("/Message").onDisconnect().remove();
+  $("#chat-input").val("");
+}
 });
 
 ref.child("/Message").orderByChild("dateAdded").limitToLast(5).on("child_added", function (message) {
-  
+
   var tBody = $("tbody");
   var tRow = $("<tr>");
   // var playerString = localPlayer+sender
@@ -462,8 +467,7 @@ ref.child("/Message").orderByChild("dateAdded").limitToLast(5).on("child_added",
   var textTD = $("<td>").text(message.val().text);
   var dateATD = $("<td>").text(moment(message.val().dateAdded).format("hh:mm:ss"));
   tRow.append(whoSentTD, textTD, dateATD);
-  tBody.append(tRow);
+  tBody.prepend(tRow);
   
-
 
 })
